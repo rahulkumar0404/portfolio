@@ -37,6 +37,9 @@
 .footer > div > a :nth-child(2):hover{
     color: #4058e2;
 }
+.footer > div > a :nth-child(3):hover{
+    color: #f13b3b;
+}
 
 .footerContactBtn {
     background-color: #ffffff;
@@ -48,12 +51,16 @@
     transition: all 0.5s;
     border: 1px solid #ffffff;
     margin: 2vmax 0 ;
-
+    display: block;
 }
 
-/* .footerContactBtn > p{
-    color: none;
+.footerContactBtn > p{
+    color: #000000;
 }
 .footerContactBtn :hover{
     background-color: unset;
-} */
+} 
+
+.footerContactBtn:hover>p {
+    color: #c08080;
+}

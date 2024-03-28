@@ -1,6 +1,6 @@
 import { Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { BsGithub, BsLinkedin } from 'react-icons/bs';
+import { BsGithub, BsInstagram, BsLinkedin } from 'react-icons/bs';
 import './Footer.css';
 const Footer = () => {
   return (
@@ -16,13 +16,19 @@ const Footer = () => {
           <Typography>Contact Us</Typography>
         </Link>
       </div>
-      <div className='footerSocialMedia'>
+      <div className="footerSocialMedia">
         <Typography variant="h6">Social Media</Typography>
         <a href="https://github.com/rahulkumar0404" target="blank">
           <BsGithub />
         </a>
-        <a href="https://github.com/rahulkumar0404" target="blank">
+        <a
+          href="https://www.linkedin.com/in/rahul-kumar-58a527190/"
+          target="blank"
+        >
           <BsLinkedin />
+        </a>
+        <a href="https://www.instagram.com/rahul703320/" target="blank">
+          <BsInstagram />
         </a>
       </div>
     </div>

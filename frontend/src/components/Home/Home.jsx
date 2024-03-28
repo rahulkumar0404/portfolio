@@ -4,15 +4,17 @@ import { Typography } from '@mui/material';
 import TimeLine from '../Timeline/Timeline';
 import './Home.css';
 // files
-import moonImage from '../../Images/moon.jpg';
-import venusImage from '../../Images/venus.jpg';
-import spaceImage from '../../Images/space.jpg';
-import cssImage from '../../Images/css.svg';
-import mongodbImage from '../../Images/html.svg';
-import javascriptImage from '../../Images/javascript.svg';
-import expressImage from '../../Images/express.svg';
-import nodeJsImage from '../../Images/nodejs.svg';
-import reactImage from '../../Images/React.png';
+import {
+  moonImage,
+  venusImage,
+  spaceImage,
+  cssImage,
+  javascriptImage,
+  expressImage,
+  reactImage,
+  mongodbImage,
+  nodeJsImage,
+} from '../../constants.js';
 import {
   SiCplusplus,
   SiReact,
@@ -169,9 +171,9 @@ const Home = () => {
         </div>
       </div>
       <div className="homeYoutube">
-        <Typography variant='h3'>SHORT VIDEOS</Typography>
+        <Typography variant="h3">SHORT VIDEOS</Typography>
         <div className="homeYoutubeWrapper">
-          <YoutubeCard image={expressImage} title="Sample"/>
+          <YoutubeCard image={expressImage} title="Sample" />
         </div>
       </div>
     </div>
