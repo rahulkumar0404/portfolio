@@ -1,13 +1,35 @@
 import { Typography, Button } from '@mui/material';
-import { useState } from 'react';
-import './Login.css'
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../actions/login';
+import { useAlert } from 'react-alert';
+import { loginActions } from '../../reducers/login';
+import './Login.css';
+
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const dispatch = useDispatch();
+  const alert = useAlert();
+
   const submitHandler = (e) => {
-    e.preventDefault()
-  }
+    e.preventDefault();
+    dispatch(loginUser(email, password));
+  };
+
+  const { loading, message, error } = useSelector((state) => state.login);
+
+  useEffect(() => {
+    if (error) {
+      alert.error(error);
+      dispatch(loginActions.onClearError());
+    }
+    if (message) {
+      alert.success(message);
+      dispatch(loginActions.onClearMessage());
+    }
+  }, [alert, error, message, dispatch]);
   return (
     <div className="login">
       <div className="loginContainer">
@@ -38,7 +60,7 @@ const Login = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Button type="submit" variant="contained">
+            <Button type="submit" variant="contained" disabled={loading}>
               Login
             </Button>
           </div>
