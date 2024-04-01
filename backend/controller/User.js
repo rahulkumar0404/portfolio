@@ -1,7 +1,7 @@
 import { User } from '../model/User.js';
 import jwt from 'jsonwebtoken';
 import { sendMail } from '../middleware/sendMail.js';
-import cloudinary from 'cloudinary';
+import { v2 as cloudinary } from 'cloudinary';
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -90,7 +90,6 @@ export const updateUser = async (req, res) => {
   try {
     const user = await User.findById(req.user._id);
     const { name, email, password, skills, about } = req.body;
-
     if (name) {
       user.name = name;
     }
@@ -100,13 +99,13 @@ export const updateUser = async (req, res) => {
     if (password) {
       user.password = password;
     }
-    if (skills) {
+    if (skills && Object.keys(skills).length > 0) {
       for (let i = 1; i <= 6; i++) {
-        const imageKey = `image[i]`;
+        const imageKey = `image${i}`;
 
         if (skills[imageKey]) {
           await cloudinary.v2.uploader.destroy(user.skills[imageKey].public_id);
-          const myCloud = await cloudinary.v2.uploader.upload(
+          const myCloud = await cloudinary.uploader.upload(
             skills[imageKey],
             {
               folder: 'portfolio',
@@ -121,16 +120,16 @@ export const updateUser = async (req, res) => {
       }
     }
     if (about) {
-      user.about.name = about.name;
-      user.about.title = about.title;
-      user.about.subtitle = about.subtitle;
-      user.about.description = about.description;
-      user.about.quote = about.quote;
+      if (about.name) user.about.name = about.name;
+      if (about.title) user.about.title = about.title;
+      if (about.subtitle) user.about.subtitle = about.subtitle;
+      if (about.description) user.about.description = about.description;
+      if (about.description) user.about.quote = about.quote;
       if (about.avatar) {
-        await cloudinary.v2.uploader.destroy(user.about.avatar.public_id);
-        const myCloud = await cloudinary.v2.uploader.upload(about.avatar, {
+        await cloudinary.uploader.destroy(user.about.avatar.public_id);
+        const myCloud = await cloudinary.uploader.upload(about.avatar, {
           folder: 'portfolio',
-          transformation: [{ quality: good }],
+          transformation: [{ quality: 'auto' }],
         });
 
         user.about.avatar = {
