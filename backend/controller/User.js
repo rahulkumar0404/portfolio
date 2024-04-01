@@ -32,8 +32,7 @@ export const logout = async (req, res) => {
   try {
     res
       .status(200)
-      .cookie('token', null)
-      .json({
+      .cookie('token', null, {
         expires: new Date(Date.now()),
         httpOnly: true,
       })
