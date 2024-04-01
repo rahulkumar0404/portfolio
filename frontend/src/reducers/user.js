@@ -9,7 +9,7 @@ const userSlice = createSlice({
   },
 
   reducers: {
-    getUserRequest(state, action) {
+    getUserRequest(state) {
       state.loading = true;
     },
     getUserSuccess(state, action) {
