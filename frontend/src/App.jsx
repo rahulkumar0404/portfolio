@@ -12,6 +12,8 @@ import Projects from './components/Projects/Projects.jsx';
 import Contact from './components/Contacts/Contact.jsx';
 import Login from './components/Login/Login.jsx';
 import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
+import Timeline from './components/AdminPanel/Timeline.jsx';
+import Youtube from './components/AdminPanel/Youtube.jsx';
 // actions
 import { getUser } from './actions/user.js';
 import { loadUser } from './actions/login.js';
@@ -26,7 +28,7 @@ function App() {
   }, [dispatch]);
   return (
     <Router>
-      {loading  ? (
+      {loading ? (
         <div>Loading</div>
       ) : (
         <>
@@ -39,6 +41,14 @@ function App() {
             <Route
               path="/account"
               element={isAuthenticated ? <AdminPanel /> : <Login />}
+            />
+            <Route
+              path="/admin/timeline"
+              element={isAuthenticated ? <Timeline /> : <Login />}
+            />
+            <Route
+              path="/admin/youtube"
+              element={isAuthenticated ? <Youtube /> : <Login />}
             />
           </Routes>
           <Footer />

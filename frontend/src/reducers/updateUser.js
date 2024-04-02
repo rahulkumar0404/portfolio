@@ -9,7 +9,7 @@ const updateUserSlice = createSlice({
   },
 
   reducers: {
-    getUserLoading(state){
+    getUserLoading(state) {
       state.onUpdateLoading = true;
     },
     onUpdateUserSuccess(state, action) {
@@ -25,6 +25,17 @@ const updateUserSlice = createSlice({
     },
     onClearMessage: (state) => {
       state.message = null;
+    },
+    onTimelineLoading(state) {
+      state.onUpdateLoading = true;
+    },
+    onUpdateTimelineSuccess(state, action) {
+      state.onUpdateLoading = false;
+      state.message = action.payload;
+    },
+    onUpdateTimelineFailure(state, action) {
+      state.onUpdateLoading = false;
+      state.error = action.payload;
     },
   },
 });
