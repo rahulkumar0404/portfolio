@@ -47,7 +47,7 @@ export const logout = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user = await User.findOne().select('-password -email');
+    const user = await User.findOne().select('-password -email').limit(1);;
     res.status(200).json({
       success: true,
       user,
@@ -105,12 +105,9 @@ export const updateUser = async (req, res) => {
 
         if (skills[imageKey]) {
           await cloudinary.v2.uploader.destroy(user.skills[imageKey].public_id);
-          const myCloud = await cloudinary.uploader.upload(
-            skills[imageKey],
-            {
-              folder: 'portfolio',
-            }
-          );
+          const myCloud = await cloudinary.uploader.upload(skills[imageKey], {
+            folder: 'portfolio',
+          });
 
           user.skills[imageKey] = {
             public_id: myCloud.public_id,
@@ -158,7 +155,7 @@ export const addTimeline = async (req, res) => {
       description,
       date,
     });
-
+    await user.save();
     res.status(200).json({
       success: true,
       message: 'New Timeline Added',
@@ -173,9 +170,9 @@ export const addProject = async (req, res) => {
     const { title, url, image, description, techStack } = req.body;
     const user = await User.findById(req.user._id);
 
-    const myCloud = await cloudinary.v2.uploader.upload(image, {
+    const myCloud = await cloudinary.uploader.upload(image, {
       folder: 'portfolio',
-      transformation: [{ quality: good }],
+      transformation: [{ quality: 'auto' }],
     });
     user.projects.unshift({
       url,
@@ -203,9 +200,14 @@ export const addYoutube = async (req, res) => {
     const { title, url, image } = req.body;
     const user = await User.findById(req.user._id);
 
-    const myCloud = await cloudinary.v2.uploader.upload(image, {
+    const myCloud = await cloudinary.uploader.upload(image, {
       folder: 'portfolio',
-      transformation: [{ quality: good }],
+      transformation: [
+        { quality: '40' },
+        { fetch_format: 'auto' },
+        { width: 600, height: 600, crop: 'limit' },
+        { flags: 'progressive' },
+      ],
     });
 
     user.youtube.unshift({
@@ -233,7 +235,7 @@ export const deleteTimeline = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(req.user._id);
 
-    user.timeline = user.timeline.filter((item) => item._id !== id);
+    user.timeline = user.timeline.filter((item) => item._id != id);
 
     await user.save();
 
@@ -251,10 +253,10 @@ export const deleteYoutube = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(req.user._id);
 
-    const video = user.youtube.find((video) => video._id === id);
+    const video = user.youtube.find((video) => video._doc._id.toString() === id);
 
-    await cloudinary.v2.uploader.destroy(video.image.public_id);
-    user.youtube = user.youtube.filter((video) => video._id !== id);
+    await cloudinary.uploader.destroy(video._doc.image.public_id);
+    user.youtube = user.youtube.filter((video) => video._doc._id.toString() !== id);
 
     await user.save();
 
@@ -272,10 +274,10 @@ export const deleteProject = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(req.user._id);
 
-    const project = user.projects.find((item) => item._id === id);
+    const project = user.projects.find((item) => item._id == id);
 
     await cloudinary.v2.uploader.destroy(project.image.public_id);
-    user.projects = user.projects.filter((project) => project._id !== id);
+    user.projects = user.projects.filter((project) => project._id != id);
 
     await user.save();
 
