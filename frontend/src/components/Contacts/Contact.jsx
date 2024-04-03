@@ -17,7 +17,7 @@ const Contact = () => {
     loading,
     message: alertMessage,
     error,
-  } = useSelector((state) => state.update);
+  } = useSelector((state) => state.updateUser);
   const contactFormHandler = (event) => {
     event.preventDefault();
     dispatch(ContactUser(name, email, message));
@@ -62,7 +62,7 @@ const Contact = () => {
             onChange={(e) => setMessage(e.target.value)}
           />
           <Button variant="contained" type="submit" disabled={loading}>
-            {loading ? 'Please Wait While Send...' : 'Send'}
+            {loading ? 'Please Wait While Sending....' : 'Send'}
           </Button>
         </form>
       </div>

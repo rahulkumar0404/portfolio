@@ -152,8 +152,8 @@ const Home = ({ timeline, youtube, skills }) => {
         </Typography>
 
         <div className="homeCanvasBox">
-          <Typography variant="h2">DEVELOPER</Typography>
-          <Typography variant="h2">TEACHER</Typography>
+          <Typography variant="h2">FULL STACK</Typography>
+          <Typography variant="h2" style={{letterSpacing: "10px", fontSize: "3rem"}}>DEVELOPER</Typography>
         </div>
 
         <Link to="/projects">Projects</Link>
