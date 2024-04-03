@@ -16,7 +16,7 @@ export const login = async (req, res) => {
     return res
       .status(200)
       .cookie('token', token, {
-        expires: new Date(Date.now() + 10 * 60 * 1000),
+        expires: new Date(Date.now() + 1 * 60 * 60 * 1000),
         httpOnly: true,
       })
       .json({
@@ -47,7 +47,7 @@ export const logout = async (req, res) => {
 
 export const getUser = async (req, res) => {
   try {
-    const user = await User.findOne().select('-password -email').limit(1);;
+    const user = await User.findOne().select('-password -email').limit(1);
     res.status(200).json({
       success: true,
       user,
@@ -77,7 +77,7 @@ export const contact = async (req, res) => {
 
     await sendMail(userMessage);
 
-    return res.status({
+    return res.status(200).json({
       success: true,
       message: 'Message sent successfully',
     });
@@ -121,7 +121,7 @@ export const updateUser = async (req, res) => {
       if (about.title) user.about.title = about.title;
       if (about.subtitle) user.about.subtitle = about.subtitle;
       if (about.description) user.about.description = about.description;
-      if (about.description) user.about.quote = about.quote;
+      if (about.quote) user.about.quote = about.quote;
       if (about.avatar) {
         await cloudinary.uploader.destroy(user.about.avatar.public_id);
         const myCloud = await cloudinary.uploader.upload(about.avatar, {
@@ -253,10 +253,14 @@ export const deleteYoutube = async (req, res) => {
     const { id } = req.params;
     const user = await User.findById(req.user._id);
 
-    const video = user.youtube.find((video) => video._doc._id.toString() === id);
+    const video = user.youtube.find(
+      (video) => video._doc._id.toString() === id
+    );
 
     await cloudinary.uploader.destroy(video._doc.image.public_id);
-    user.youtube = user.youtube.filter((video) => video._doc._id.toString() !== id);
+    user.youtube = user.youtube.filter(
+      (video) => video._doc._id.toString() !== id
+    );
 
     await user.save();
 
@@ -276,7 +280,7 @@ export const deleteProject = async (req, res) => {
 
     const project = user.projects.find((item) => item._id == id);
 
-    await cloudinary.v2.uploader.destroy(project.image.public_id);
+    await cloudinary.uploader.destroy(project.image.public_id);
     user.projects = user.projects.filter((project) => project._id != id);
 
     await user.save();
