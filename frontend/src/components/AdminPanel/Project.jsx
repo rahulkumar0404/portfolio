@@ -1,18 +1,21 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useAlert } from 'react-alert';
-import { useState, useEffect } from 'react';
-import { addTimeline, deleteTimeline } from '../../actions/updateUser';
-import { updateUserAction } from '../../reducers/updateUser';
-import { Button, Typography } from '@mui/material';
+import { Typography, Button } from '@mui/material';
 import { MdKeyboardBackspace } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { useAlert } from 'react-alert';
+import { useDispatch, useSelector } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { updateUserAction } from '../../reducers/updateUser';
+import { addProject } from '../../actions/updateUser';
 import { getUser } from '../../actions/user';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { loginActions } from '../../reducers/login';
-const Timeline = () => {
+import { ProjectCard } from '../Projects/Projects.jsx';
+import { loginActions } from '../../reducers/login.js';
+
+const Project = () => {
   const [title, setTitle] = useState('');
+  const [url, setUrl] = useState('');
+  const [image, setImage] = useState('');
   const [description, setDescription] = useState('');
-  const [date, setDate] = useState();
+  const [techStack, setTechStack] = useState('');
   const alert = useAlert();
   const dispatch = useDispatch();
   const {
@@ -28,36 +31,33 @@ const Timeline = () => {
       alert.success(message);
       dispatch(updateUserAction.onClearMessage());
     }
-    if (error) {
-      alert.error(error);
-      dispatch(updateUserAction.onClearError());
-    }
     if (loginMessage) {
       alert.success(loginMessage);
       dispatch(loginActions.onClearMessage());
+    }
+    if (error) {
+      alert.error(error);
+      dispatch(updateUserAction.onClearError());
     }
   }, [alert, message, error, dispatch, loginMessage]);
 
   const submitHandler = async (event) => {
     event.preventDefault();
-    await dispatch(addTimeline(title, description, date));
+    await dispatch(addProject(title, url, image, description, techStack));
     dispatch(getUser());
   };
 
-  const deleteHandler = async (id) => {
-    await dispatch(deleteTimeline(id));
-    dispatch(getUser());
-  };
+  function handleAboutImage(e) {
+    const file = e.target.files[0];
+    const Reader = new FileReader();
+    Reader.readAsDataURL(file);
 
-  const dateFormattor = (datevalue) => {
-    const date = new Date(datevalue);
-    const formattedDate = date.toLocaleDateString('en-GB', {
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-    return formattedDate;
-  };
+    Reader.onload = () => {
+      if (Reader.readyState === 2) {
+        setImage(Reader.result);
+      }
+    };
+  }
   return (
     <div className="adminPanel">
       <div className="adminPanelContainer">
@@ -81,6 +81,21 @@ const Timeline = () => {
             onChange={(e) => setTitle(e.target.value)}
             className="adminPanelInputs"
           />
+          <input
+            type="text"
+            placeholder="Link"
+            value={url}
+            onChange={(e) => setUrl(e.target.value)}
+            className="adminPanelInputs"
+          />
+          <input
+            type="file"
+            placeholder="Choose Image"
+            accept="image/*"
+            onChange={handleAboutImage}
+            className="adminPanelFileUpload"
+          />
+
           <textarea
             placeholder="Description"
             rows="7"
@@ -89,11 +104,12 @@ const Timeline = () => {
             onChange={(e) => setDescription(e.target.value)}
             className="adminPanelInputs adminPanelInputTextarea"
           />
+
           <input
-            type="date"
-            placeholder="Date"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
+            type="text"
+            placeholder="TechStack"
+            value={techStack}
+            onChange={(e) => setTechStack(e.target.value)}
             className="adminPanelInputs"
           />
 
@@ -102,33 +118,24 @@ const Timeline = () => {
           </Link>
 
           <Button type="submit" variant="contained" disabled={loading}>
-            {loading ? 'Please Wait While Add....' : 'Add'}
+            {loading ? 'Please Wait While Uploading....' : 'Add'}
           </Button>
         </form>
+
         <div className="adminPanelYoutubeVideos">
           {user &&
-            user.user.timeline &&
-            user.user.timeline.map((item) => (
-              <div key={item._id} className="youtubeCard">
-                <Typography variant="h6">{item.title}</Typography>
-                <Typography variant="body1" style={{ letterSpacing: '2px' }}>
-                  {item.description}
-                </Typography>
-                <Typography variant="body1" style={{ fontWeight: 600 }}>
-                  {dateFormattor(item.date)}
-                </Typography>
-
-                <Button
-                  style={{
-                    margin: 'auto',
-                    display: 'block',
-                    color: '#282828b3',
-                  }}
-                  onClick={() => deleteHandler(item._id)}
-                >
-                  <DeleteIcon />
-                </Button>
-              </div>
+            user.user.projects &&
+            user.user.projects.map((item) => (
+              <ProjectCard
+                key={item._id}
+                url={item.url}
+                projectImage={item.image.url}
+                projectTitle={item.title}
+                description={item.description}
+                technologies={item.techStack}
+                isAdmin="true"
+                id={item._id}
+              />
             ))}
         </div>
       </div>
@@ -136,4 +143,4 @@ const Timeline = () => {
   );
 };
 
-export default Timeline;
+export default Project;

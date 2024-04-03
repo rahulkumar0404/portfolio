@@ -9,6 +9,16 @@ import { Event } from '@mui/icons-material';
 import { Typography } from '@mui/material';
 
 const TimeLine = ({ timelines = [] }) => {
+  const dateFormattor = (datevalue) => {
+    console.log(datevalue)
+    const date = new Date(datevalue);
+    const formattedDate = date.toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+    return formattedDate;
+  };
   return (
     <div>
       <Timeline position="alternate">
@@ -20,7 +30,7 @@ const TimeLine = ({ timelines = [] }) => {
               variant="body2"
               color="text.secondary"
             >
-              3/27/20
+              {dateFormattor(item.date)}
             </TimelineOppositeContent>
             <TimelineSeparator>
               <TimelineConnector />
@@ -29,8 +39,8 @@ const TimeLine = ({ timelines = [] }) => {
               </TimelineDot>
             </TimelineSeparator>
             <TimelineContent sx={{ py: '12px', px: '2px' }}>
-              <Typography variant="h6">Title</Typography>
-              <Typography>Description</Typography>
+              <Typography variant="h6">{timelines.title}</Typography>
+              <Typography>{timelines.description}</Typography>
             </TimelineContent>
           </TimelineItem>
         ))}

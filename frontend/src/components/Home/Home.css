@@ -3,8 +3,8 @@
     max-width: 100%;
     height: 100vh;
     max-width: 100%;
-    /* filter: blur(10px);
-    position: absolute; */
+    filter: blur(10px);
+    position: absolute;
 }
 
 .homeContainer{
@@ -16,6 +16,89 @@
     z-index: 1;
 }
 
+.homeCanvasContainer{
+    background-color: #0000000c;
+    width: 100%;
+    z-index: 2;
+    position: relative;
+    height: 100vh;
+    color: white;
+    display: flex;
+}
+
+.homeCanvasContainer > h1 {
+    filter: drop-shadow(0 0 2px rgb(28,116,216));
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    background-color: #ffffff;
+    padding: 2vmax;
+    transform: translate(0%, -50%);
+    text-align: center;
+    font: 700 3vmax "Josefin Sans", sans-serif;
+    border-radius: 0 10px 10px 0;
+}
+
+.homeCanvasContainer>h1>p{
+    transition: all 0.5s;
+    color: #242424;
+}
+.homeCanvasContainer>h1>p:hover{
+    transform: translateY(-10px);
+}
+
+.homeCanvasBox {
+    position: absolute;
+    top: 50%;
+    right: 0%;
+    text-align: right;
+    transform: translate(0%, -50%);
+}
+
+.homeCanvasBox> h2 {
+    font: 700 4rem "Ubuntu Mono", sans-serif;
+    letter-spacing: 12px;
+    line-height: 80px;
+    color: white;
+}
+
+.homeCanvasContainer> a{
+    background-color: white;
+    transition: all 0.5s;
+    color: #000000;
+    font: 900 1vmax "Ubuntu Mono", "Roboto";
+    text-decoration: none;
+    padding: 2vmax 6vmax;
+    box-sizing: border-box;
+    border: 1px solid #ffffff;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.homeCanvasContainer>a :hover{
+    color: #ffffff;
+    background-color: #000000;
+
+}
+
+.homeScrollBtn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    left: 50%;
+    border-radius: 100%;
+    transform: translateY(-150%);
+    padding: 0.5vmax;
+    animation: scrollPop 0.5s ease-in infinite alternate;
+}
+
+.homeScrollBtn > svg {
+    font-size: 3vmax;
+    color: #ffffff;
+}
 .homeContainer>h3{
     text-align: center;
     color: #161400e8;
@@ -172,5 +255,11 @@
     }
     to{
         transform: translateX(-300px);
+    }
+}
+
+@keyframes scrollPop {
+    to{
+        transform: translateY(-200%);
     }
 }

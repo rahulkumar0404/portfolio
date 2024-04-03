@@ -61,6 +61,9 @@
     font: 100 1rem 'Roboto';
 }
 
+.showPasswordButton{
+    animation: contactFormInput 1s ease-in-out forwards 0.5s;
+}
 .loginForm > div > button {
     padding: 1vmax 2vmax;
     margin: 1vmax;

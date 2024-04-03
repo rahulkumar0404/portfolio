@@ -8,7 +8,7 @@ export const getUser = () => {
         throw new Error('Something went wrong');
       }
       const { data } = response;
-      return data;
+      return data.user;
     };
     try {
       dispatch(userActions.getUserRequest());
@@ -16,7 +16,7 @@ export const getUser = () => {
       const userData = await getUserData();
       dispatch(userActions.getUserSuccess(userData));
     } catch (err) {
-      dispatch(userActions.getUserFailure(err.message));
+      dispatch(userActions.getUserFailure(err.response.data.message));
     }
   };
 };

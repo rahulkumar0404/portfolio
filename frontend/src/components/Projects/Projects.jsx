@@ -3,11 +3,11 @@ import { AiOutlineProject } from 'react-icons/ai';
 import { Delete } from '@mui/icons-material';
 import { Button } from '@mui/material';
 import { FaRegSmileWink } from 'react-icons/fa';
-// images
-import { ticTacToeImage } from '../../constants';
+import { useDispatch } from 'react-redux';
 import './Projects.css';
-const Projects = () => {
-  const projects = [1, 2, 3];
+import { deleteProject } from '../../actions/updateUser';
+import { getUser } from '../../actions/user';
+const Projects = ({projects = []}) => {
   return (
     <div className="projects">
       <Typography variant="h3">
@@ -16,12 +16,12 @@ const Projects = () => {
       <div className="projectWrapper">
         {projects.map((project, index) => (
           <ProjectCard
-            key={project}
-            url="https://zingy-vacherin-a34b48.netlify.app/"
-            projectImage={ticTacToeImage}
-            projectTitle="Tic Tac Toe"
-            description="Basic Game between two player for X-O"
-            technologies="React"
+            key={index}
+            url={project.url}
+            projectImage={project.image.url}
+            projectTitle={project.title}
+            description={project.description}
+            technologies={project.techStack}
           />
         ))}
       </div>
@@ -33,14 +33,20 @@ const Projects = () => {
   );
 };
 
-const ProjectCard = ({
+export const ProjectCard = ({
   url,
   projectImage,
   projectTitle,
   description,
   technologies,
   isAdmin = false,
+  id,
 }) => {
+  const dispatch = useDispatch();
+  const deleteHandler = async (id) => {
+    await dispatch(deleteProject(id));
+    dispatch(getUser());
+  };
   return (
     <>
       <a href={url} className="projectCard" target="blank">
@@ -56,7 +62,10 @@ const ProjectCard = ({
       </a>
 
       {isAdmin && (
-        <Button style={{ color: '#282828b3' }}>
+        <Button
+          style={{ color: '#282828b3' }}
+          onClick={() => deleteHandler(id)}
+        >
           <Delete />
         </Button>
       )}

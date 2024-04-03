@@ -166,7 +166,7 @@ export const addProject = (title, url, image, description, techStack) => {
   return async (dispatch) => {
     const addUserProject = async () => {
       const response = await axios.post(
-        'http://localhost:4000/api/admin/youtube/add',
+        'http://localhost:4000/api/admin/projects/add',
         {
           title,
           url,
@@ -197,7 +197,7 @@ export const deleteProject = (id) => {
   return async (dispatch) => {
     const deleteUserProject = async () => {
       const response = await axios.delete(
-        `http://localhost:4000/api/admin/project/${id}`,
+        `http://localhost:4000/api/admin/projects/${id}`,
         config
       );
       if (response.statusText != 'OK') {
@@ -211,6 +211,31 @@ export const deleteProject = (id) => {
       dispatch(updateUserAction.getUserLoading());
       const projectResponse = await deleteUserProject();
       dispatch(updateUserAction.onUpdateUserSuccess(projectResponse.message));
+    } catch (err) {
+      dispatch(updateUserAction.onUpdateUserFailure(err.response.data.message));
+    }
+  };
+};
+
+export const ContactUser = (name, email, message) => {
+  return async (dispatch) => {
+    const contactUsRequest = async () => {
+      const response = await axios.post(
+        `http://localhost:4000/api/contact`,
+        { name, email, message },
+        config
+      );
+      if (response.statusText != 'OK') {
+        throw new Error('Something went wrong');
+      }
+      const { data } = response;
+      return data;
+    };
+
+    try {
+      dispatch(updateUserAction.getUserLoading());
+      const contactResponse = await contactUsRequest();
+      dispatch(updateUserAction.onUpdateUserSuccess(contactResponse.message));
     } catch (err) {
       dispatch(updateUserAction.onUpdateUserFailure(err.response.data.message));
     }

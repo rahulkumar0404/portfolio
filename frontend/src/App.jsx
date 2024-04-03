@@ -14,46 +14,61 @@ import Login from './components/Login/Login.jsx';
 import AdminPanel from './components/AdminPanel/AdminPanel.jsx';
 import Timeline from './components/AdminPanel/Timeline.jsx';
 import Youtube from './components/AdminPanel/Youtube.jsx';
+import Project from './components/AdminPanel/Project.jsx';
+
 // actions
 import { getUser } from './actions/user.js';
 import { loadUser } from './actions/login.js';
 
 function App() {
   const dispatch = useDispatch();
-  const { loading, user } = useSelector((state) => state.user);
   const { isAuthenticated } = useSelector((state) => state.login);
+  const { loading, user } = useSelector((state) => state.user);
   useEffect(() => {
     dispatch(getUser());
     dispatch(loadUser());
   }, [dispatch]);
+  console.log(user);
+  if (loading) {
+    return <div>Loading</div>;
+  }
   return (
     <Router>
-      {loading ? (
-        <div>Loading</div>
-      ) : (
-        <>
-          <Header />
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/about" element={<About />} />
-            <Route path="/projects" element={<Projects />} />
-            <Route path="/contact" element={<Contact />} />
-            <Route
-              path="/account"
-              element={isAuthenticated ? <AdminPanel /> : <Login />}
-            />
-            <Route
-              path="/admin/timeline"
-              element={isAuthenticated ? <Timeline /> : <Login />}
-            />
-            <Route
-              path="/admin/youtube"
-              element={isAuthenticated ? <Youtube /> : <Login />}
-            />
-          </Routes>
-          <Footer />
-        </>
-      )}
+      <Header />
+      <Routes>
+        <Route
+          path="/"
+          element={
+            user ? (
+              <Home
+                youtube={user.youtube}
+                timeline={user.timeline}
+                skills={user.skills}
+              />
+            ) : null
+          }
+        />
+        <Route path="/about" element={user ? <About about={user.about}/>: null} />
+        <Route path="/projects" element={user ? <Projects projects={user.projects}/>: null} />
+        <Route path="/contact" element={user ?  <Contact /> : null } />
+        <Route
+          path="/account"
+          element={isAuthenticated ? <AdminPanel /> : <Login />}
+        />
+        <Route
+          path="/admin/timeline"
+          element={isAuthenticated ? <Timeline /> : <Login />}
+        />
+        <Route
+          path="/admin/youtube"
+          element={isAuthenticated ? <Youtube /> : <Login />}
+        />
+        <Route
+          path="/admin/project"
+          element={isAuthenticated ? <Project /> : <Login />}
+        />
+      </Routes>
+      <Footer />
     </Router>
   );
 }

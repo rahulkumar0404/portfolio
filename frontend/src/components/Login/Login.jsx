@@ -79,6 +79,7 @@ const Login = () => {
                 style={{ flex: '1' }}
               />
               <Button
+                className="showPasswordButton"
                 type="button"
                 onClick={showPassword}
                 style={{

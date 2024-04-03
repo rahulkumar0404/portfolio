@@ -4,17 +4,7 @@ import { Typography } from '@mui/material';
 import TimeLine from '../Timeline/Timeline';
 import './Home.css';
 // files
-import {
-  moonImage,
-  venusImage,
-  spaceImage,
-  cssImage,
-  javascriptImage,
-  expressImage,
-  reactImage,
-  mongodbImage,
-  nodeJsImage,
-} from '../../constants.js';
+import { moonImage, venusImage, spaceImage } from '../../constants.js';
 import {
   SiCplusplus,
   SiReact,
@@ -29,8 +19,10 @@ import {
 
 import { FaJava } from 'react-icons/fa';
 import YoutubeCard from '../YoutubeCards/YoutubeCard';
+import { Link } from 'react-router-dom';
+import { MouseOutlined } from '@mui/icons-material';
 
-const Home = () => {
+const Home = ({ timeline, youtube, skills }) => {
   useEffect(() => {
     const textureLoader = new THREE.TextureLoader();
 
@@ -115,49 +107,72 @@ const Home = () => {
       camera.rotation.z = window.scrollY * 0.001;
       camera.rotation.y = window.scrollY * 0.003;
 
-      //  const skillsBox = document.getElementById('homeskillsBox');
+      const skillsBox = document.getElementById('homeskillsBox');
 
-      //  if (window.scrollY > 1500) {
-      //    skillsBox.style.animationName = 'homeskillsBoxAnimationOn';
-      //  } else {
-      //    skillsBox.style.animationName = 'homeskillsBoxAnimationOff';
-      //  }
+      if (window.scrollY > 1500) {
+        skillsBox.style.animationName = 'homeSkillsBoxAnimationOn';
+      } else {
+        skillsBox.style.animationName = 'homeSkillsBoxAnimationOff';
+      }
     });
   }, []);
+
+  const SkillsObjects = ({ skills }) => {
+    return (
+      <div className="homeCubeSkills">
+        {Object.keys(skills).map((key, index) => {
+          const childObj = skills[key];
+          return (
+            <div
+              key={key}
+              className={`homeCubeSkillsFaces homeCubeSkillsFace${index + 1}`}
+            >
+              <img src={childObj.url} alt="Css" />
+            </div>
+          );
+        })}
+      </div>
+    );
+  };
   return (
     <div className="Home">
       <canvas className="homeCanvas"></canvas>
+      <div className="homeCanvasContainer">
+        <Typography variant="h1">
+          <p>R</p>
+          <p>A</p>
+          <p>H</p>
+          <p>U</p>
+          <p style={{ marginBottom: '25px' }}>L</p>
+          <p>K</p>
+          <p>U</p>
+          <p>M</p>
+          <p>A</p>
+          <p>R</p>
+        </Typography>
 
+        <div className="homeCanvasBox">
+          <Typography variant="h2">DEVELOPER</Typography>
+          <Typography variant="h2">TEACHER</Typography>
+        </div>
+
+        <Link to="/projects">Projects</Link>
+      </div>
+
+      <div className="homeScrollBtn">
+        <MouseOutlined />
+      </div>
       <div className="homeContainer">
         <Typography variant="h3">Timeline</Typography>
-        <TimeLine timelines={[1, 2, 3, 4, 5]} />
+        <TimeLine timelines={timeline} />
       </div>
 
       <div className="homeSkils">
         <Typography variant="h3">SKILLS</Typography>
 
-        <div className="homeCubeSkills">
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace1">
-            <img src={cssImage} alt="Css" />
-          </div>
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace2">
-            <img src={mongodbImage} alt="Mongodb" />
-          </div>
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace3">
-            <img src={expressImage} alt="Express" />
-          </div>
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace4">
-            <img src={nodeJsImage} alt="NodeJs" />
-          </div>
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace5">
-            <img src={javascriptImage} alt="Javascript" />
-          </div>
-          <div className="homeCubeSkillsFaces homeCubeSkillsFace6">
-            <img src={reactImage} alt="React" />
-          </div>
-        </div>
+        <SkillsObjects skills={skills} />
         <div className="cubeShadow"></div>
-        <div className="homeSkillsBox">
+        <div className="homeSkillsBox" id="homeskillsBox">
           <FaJava />
           <SiCplusplus />
           <SiHtml5 />
@@ -171,9 +186,17 @@ const Home = () => {
         </div>
       </div>
       <div className="homeYoutube">
-        <Typography variant="h3">SHORT VIDEOS</Typography>
+        <Typography variant="h3">Short Video</Typography>
         <div className="homeYoutubeWrapper">
-          <YoutubeCard image={expressImage} title="Sample" />
+          {youtube.map((item) => (
+            <YoutubeCard
+              key={item._id}
+              image={item.image.url}
+              title={item.title}
+              url={item.url}
+              id={item._id}
+            />
+          ))}
         </div>
       </div>
     </div>
